@@ -1,0 +1,12 @@
+fastapi
+uvicorn
+pydantic
+youtube-transcript-api>=0.6.0
+yt-dlp
+ffmpeg-python
+faster-whisper
+PyPDF2
+python-multipart
+python-dotenv
+srt
+webvtt-py
