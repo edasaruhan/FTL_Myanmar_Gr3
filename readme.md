@@ -1,23 +1,34 @@
 # Lecture Companion
 
+AI-powered transcript generation, translation, and summarization for lectures.
+
+## Features
+- **Transcript Generation**: YouTube URL or file upload (.pdf, .txt, .srt, .vtt)
+- **Translation**: English → Burmese using Google Gemini
+- **Summarization**: English & Burmese summaries (B1-B2 level)
+
 ## How to Run This Project
 1. Clone:
    ```bash
    git clone <repo-url>
    cd FTL_Myanmar_Gr3
    ```
-2. Start services (first build may download models):
+2. Add your Gemini API key to `.env` in project root:
+   ```bash
+   GEMINI_API_KEY=your_key_here
+   ```
+3. Start services (first build may download models):
    ```bash
    docker compose up --build
    ```
-3. Open:
+4. Open:
    - Frontend: http://localhost:3000
    - Backend docs (Swagger): http://localhost:8000/docs
-4. Stop:
+5. Stop:
    ```bash
    docker compose down
    ```
-5. Update deps (backend or frontend):
+6. Update deps (backend or frontend):
    ```bash
    docker compose build backend   # or frontend
    ```
@@ -42,49 +53,68 @@ code/
   backend/
     main.py
     transcript_utils.py
+    services/
+      gemini_helper.py
+      translation_service.py
+      summarization_service.py
+    schemas/
+      llm.py
+    routes/
+      llm.py
     requirements.txt
     Dockerfile
   frontend/
     app/
+    components/
+      TranslationSummary.tsx
     package.json
     Dockerfile
 docker-compose.yml
+.env
 ```
 
 ## Backend Overview
-- Tech: FastAPI, Python 3.10.
-- Flow (YouTube): try captions → else download audio → Whisper.
+- Tech: FastAPI, Python 3.10, Google Gemini.
+- Transcription flow: YouTube captions → else audio download + Whisper.
+- LLM flow: chunk text → call Gemini per chunk → stitch results.
 - Endpoints:
   - POST /api/transcribe/youtube
   - POST /api/transcribe/upload
-- Key libs: faster-whisper, yt-dlp, ffmpeg-python, youtube-transcript-api, PyPDF2, srt, webvtt-py.
+  - POST /api/llm/translate
+  - POST /api/llm/summarize
+- Key libs: faster-whisper, yt-dlp, ffmpeg-python, youtube-transcript-api, PyPDF2, srt, webvtt-py, google-generativeai.
 
 ## Frontend Overview
 - Tech: Next.js 14 App Router + TypeScript + Tailwind.
 - Two tabs: YouTube URL | File Upload.
+- Translation & Summary section appears after transcript generation.
 - Uses `NEXT_PUBLIC_API_BASE_URL` to call backend.
 
 ## Dev Loop
 1. Run stack.
-2. Test a YouTube URL with/without native captions.
-3. Test uploads (.pdf/.txt/.srt/.vtt).
-4. Adjust logic → rebuild affected service.
+2. Generate transcript from YouTube URL or upload.
+3. Click "Translate to Burmese" or "Generate Summaries".
+4. View results in panels.
+5. Adjust code → rebuild affected service.
 
 ## Common Issues
 | Issue | Fix |
 |-------|-----|
-| `ModuleNotFoundError: srt` | Rebuild backend image after ensuring dependency in requirements.txt |
+| `ModuleNotFoundError: srt` or `google.generativeai` | Rebuild backend: `docker compose build backend` |
 | `sh: next: not found` | Remove/adjust frontend volume; rebuild to restore node_modules |
 | 404 at `/` backend | Use `/docs` or API endpoints; no root HTML |
 | Slow transcription | Switch model_size to `small` |
+| Gemini API error | Check `.env` has valid `GEMINI_API_KEY` |
 
 ## Future Work Checklist
-- Translation (multi-language output)
-- Summarization (section + overall summary)
+- ✅ Translation (English → Burmese)
+- ✅ Summarization (English + Burmese summaries)
 - RAG Q&A over transcript
+- Multi-language translation support
 - Speaker diarization (if multi-speaker)
 - Persistence + user sessions
 - Model size auto-selection based on length
+- Batch processing for multiple videos
 
 ## Contribution Guidelines
 - Branch naming: `feat/<topic>`, `fix/<topic>`
