@@ -1,6 +1,7 @@
 "use client";
 import { useState } from "react";
 import TranslationSummary from "@/components/TranslationSummary";
+import RAGComponent from "@/components/RAGComponent";
 
 const API_BASE = process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:8000";
 
@@ -125,7 +126,13 @@ export default function Home() {
       
       {/* Translation & Summary Section */}
       {(ytResult || upResult) && (
-        <TranslationSummary transcriptText={ytResult?.transcript_text || upResult?.transcript_text || ""} />
+        <>
+          <TranslationSummary transcriptText={ytResult?.transcript_text || upResult?.transcript_text || ""} />
+          <RAGComponent 
+            transcriptText={ytResult?.transcript_text || upResult?.transcript_text || ""}
+            segments={ytResult?.segments || upResult?.segments}
+          />
+        </>
       )}
     </main>
   );

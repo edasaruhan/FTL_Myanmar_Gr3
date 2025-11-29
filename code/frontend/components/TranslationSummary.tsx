@@ -11,11 +11,15 @@ type TranslationResponse = {
   source_language: string;
   target_language: string;
   translated_text: string;
+  elapsed_ms: number;
+  from_cache: boolean;
 };
 
 type SummaryResponse = {
   english_summary: string;
   burmese_summary: string;
+  elapsed_ms: number;
+  from_cache: boolean;
 };
 
 export default function TranslationSummary({ transcriptText }: TranslationSummaryProps) {
@@ -104,7 +108,13 @@ export default function TranslationSummary({ transcriptText }: TranslationSummar
       {translationError && <div className="text-red-600 mb-4">{translationError}</div>}
       {translation && (
         <div className="mb-6">
-          <h3 className="font-semibold mb-2">Burmese Translation</h3>
+          <div className="flex justify-between items-center mb-2">
+            <h3 className="font-semibold">Burmese Translation</h3>
+            <span className="text-xs text-gray-500">
+              Took {(translation.elapsed_ms / 1000).toFixed(2)}s
+              {translation.from_cache && " (cached)"}
+            </span>
+          </div>
           <div className="border rounded p-4 bg-gray-50 max-h-60 overflow-y-auto whitespace-pre-line">
             {translation.translated_text}
           </div>
@@ -114,20 +124,26 @@ export default function TranslationSummary({ transcriptText }: TranslationSummar
       {/* Summary Results */}
       {summaryError && <div className="text-red-600 mb-4">{summaryError}</div>}
       {summaries && (
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div className="border rounded p-4 bg-white shadow">
-            <h3 className="font-semibold mb-2">English Summary</h3>
-            <div className="text-sm whitespace-pre-line max-h-60 overflow-y-auto">
-              {summaries.english_summary}
+        <>
+          <div className="text-xs text-gray-500 mb-2 text-right">
+            Took {(summaries.elapsed_ms / 1000).toFixed(2)}s
+            {summaries.from_cache && " (cached)"}
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="border rounded p-4 bg-white shadow">
+              <h3 className="font-semibold mb-2">English Summary</h3>
+              <div className="text-sm whitespace-pre-line max-h-60 overflow-y-auto">
+                {summaries.english_summary}
+              </div>
+            </div>
+            <div className="border rounded p-4 bg-white shadow">
+              <h3 className="font-semibold mb-2">Burmese Summary</h3>
+              <div className="text-sm whitespace-pre-line max-h-60 overflow-y-auto">
+                {summaries.burmese_summary}
+              </div>
             </div>
           </div>
-          <div className="border rounded p-4 bg-white shadow">
-            <h3 className="font-semibold mb-2">Burmese Summary</h3>
-            <div className="text-sm whitespace-pre-line max-h-60 overflow-y-auto">
-              {summaries.burmese_summary}
-            </div>
-          </div>
-        </div>
+        </>
       )}
     </div>
   );

@@ -11,3 +11,5 @@ python-dotenv
 srt
 webvtt-py
 google-generativeai
+chromadb
+sentence-transformers

@@ -1,11 +1,13 @@
 # Lecture Companion
 
-AI-powered transcript generation, translation, and summarization for lectures.
+AI-powered transcript generation, translation, summarization, and Q&A for lectures.
 
 ## Features
 - **Transcript Generation**: YouTube URL or file upload (.pdf, .txt, .srt, .vtt)
-- **Translation**: English → Burmese using Google Gemini
-- **Summarization**: English & Burmese summaries (B1-B2 level)
+- **Translation**: English → Burmese using Google Gemini (with caching)
+- **Summarization**: English & Burmese summaries (B1-B2 level, with caching)
+- **RAG Q&A**: Ask questions about the transcript (vector search + keyword ranking)
+- **Performance**: Timing display + intelligent caching for faster responses
 
 ## How to Run This Project
 1. Clone:
@@ -109,12 +111,15 @@ docker-compose.yml
 ## Future Work Checklist
 - ✅ Translation (English → Burmese)
 - ✅ Summarization (English + Burmese summaries)
-- RAG Q&A over transcript
+- ✅ RAG Q&A over transcript
+- ✅ Caching layer for Gemini results
 - Multi-language translation support
 - Speaker diarization (if multi-speaker)
-- Persistence + user sessions
+- Persistent cache (Redis/disk)
+- Streaming responses
 - Model size auto-selection based on length
 - Batch processing for multiple videos
+- Follow-up questions with context
 
 ## Contribution Guidelines
 - Branch naming: `feat/<topic>`, `fix/<topic>`
