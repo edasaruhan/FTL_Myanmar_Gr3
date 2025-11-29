@@ -9,6 +9,7 @@ services:
       - ./code/backend:/app
     environment:
       - PYTHONUNBUFFERED=1
+      - GEMINI_API_KEY=${GEMINI_API_KEY}
   frontend:
     build: ./code/frontend
     container_name: lecture-frontend

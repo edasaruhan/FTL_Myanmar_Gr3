@@ -1,5 +1,6 @@
 "use client";
 import { useState } from "react";
+import TranslationSummary from "@/components/TranslationSummary";
 
 const API_BASE = process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:8000";
 
@@ -121,6 +122,11 @@ export default function Home() {
           </div>
         )}
       </div>
+      
+      {/* Translation & Summary Section */}
+      {(ytResult || upResult) && (
+        <TranslationSummary transcriptText={ytResult?.transcript_text || upResult?.transcript_text || ""} />
+      )}
     </main>
   );
 }

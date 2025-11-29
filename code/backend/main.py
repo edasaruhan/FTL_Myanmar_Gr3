@@ -5,8 +5,12 @@ from pydantic import BaseModel
 from typing import List, Optional, Literal
 import os, tempfile, shutil
 from transcript_utils import get_youtube_captions, download_youtube_audio, convert_audio_to_wav, transcribe_with_whisper, parse_pdf, parse_txt, parse_srt, parse_vtt
+from routes.llm import router as llm_router
 
 app = FastAPI()
+
+# Include LLM routes
+app.include_router(llm_router)
 
 # CORS
 app.add_middleware(

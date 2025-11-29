@@ -10,3 +10,4 @@ python-multipart
 python-dotenv
 srt
 webvtt-py
+google-generativeai
