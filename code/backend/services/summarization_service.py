@@ -9,7 +9,7 @@ BURMESE_SUMMARY_PROMPT = """You are an educational assistant. Summarize the foll
 Keep the summary clear, concise, and suitable for learners. Focus on main points and key takeaways.
 Preserve important technical terms. Provide only the summary without additional commentary."""
 
-def summarize_text(text: str, model: str = "gemini-1.5-flash") -> Tuple[str, str]:
+def summarize_text(text: str, model: str = "gemini-2.5-flash") -> Tuple[str, str]:
     """Generate English and Burmese summaries using Gemini.
     
     Returns:

@@ -5,7 +5,7 @@ TRANSLATION_PROMPT = """You are a professional translator. Translate the followi
 Preserve technical terms where possible. Maintain the original structure and tone.
 Provide only the translated text without any additional commentary."""
 
-def translate_to_burmese(text: str, model: str = "gemini-1.5-flash") -> str:
+def translate_to_burmese(text: str, model: str = "gemini-2.5-flash") -> str:
     """Translate English text to Burmese using Gemini."""
     if not text or len(text.strip()) < 10:
         raise ValueError("Text is too short to translate.")
