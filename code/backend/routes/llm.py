@@ -6,7 +6,7 @@ from schemas.llm import (
 )
 from services.translation_service import translate_to_burmese
 from services.summarization_service import summarize_text
-from services.rag_service import build_rag_index, query_rag
+from services.rag_service import build_rag_index, query_rag, get_index_stats, get_all_chunks, clear_index
 
 router = APIRouter(prefix="/api/llm", tags=["LLM"])
 
@@ -108,3 +108,28 @@ def query_transcript(req: RAGQueryRequest):
         raise HTTPException(status_code=400, detail=str(e))
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"RAG query error: {str(e)}")
+
+@router.get("/rag/stats")
+def get_rag_stats():
+    """Get statistics about the indexed RAG collection."""
+    try:
+        return get_index_stats()
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error retrieving stats: {str(e)}")
+
+@router.get("/rag/chunks")
+def get_indexed_chunks():
+    """Get all indexed chunks with full content."""
+    try:
+        chunks = get_all_chunks()
+        return {"chunk_count": len(chunks), "chunks": chunks}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error retrieving chunks: {str(e)}")
+
+@router.delete("/rag/index")
+def delete_rag_index():
+    """Clear the RAG index."""
+    try:
+        return clear_index()
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error deleting index: {str(e)}")
